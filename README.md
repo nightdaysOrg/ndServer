@@ -22,14 +22,16 @@ config/server.js 中
 之后在自己的项目中创建controllers.js,加入以下代码
 
 
->const controllers = function (server) {
->    server.use('/hello', function (req, res, next) {
+>const controllers =  {
+>     helloWorld (req, res, next) {
 >        res.send('Hello world');
 >    });
 >}
 >module.exports = {
->    init: controllers
+>    controllers: controllers
 >}
 >
+访问localhost:8080/helloWorld 就可以看到Hello world
+
 
 例子位于web/manager
