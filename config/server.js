@@ -5,9 +5,9 @@ const port = 8080;
 //     E:/workspace/ShopkeeperFE/dist
 // `;
 
-const staticResourcePath = `F:/mySelfItem/ndServer/web/manager`;
+const staticResourcePath = `F:/mySelfItem/fileSystem/web`;
 
-const controllersPath = `F:/mySelfItem/ndServer/web/manager/controllers.js`;
+const controllersPath = `F:/mySelfItem/fileSystem/web/controllers.js`;
 
 module.exports = {
     port:port,
