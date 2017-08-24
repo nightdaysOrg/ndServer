@@ -7,6 +7,9 @@
 2. cd ndsServer
 3. npm install
 4. 安装完毕
+5. cd bin
+6. startup.bat
+7. 服务器启动成功
 
 ## 使用 ##
 1. 静态html资源路径
