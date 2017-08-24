@@ -1,16 +1,11 @@
-const controllers = function (server) {
+const controllers = {
 
-    server.use('/hello', function (req, res, next) {
-        res.send('Hello world');
-    });
-
-
-
-
-
+    helloWorld:function(req,res,next){
+        res.send('Hello');
+    }
 
 }
 
 module.exports = {
-    init: controllers
+    controllers: controllers
 }
