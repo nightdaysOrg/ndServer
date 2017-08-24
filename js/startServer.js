@@ -21,3 +21,14 @@ for(let ctrl in controllers){
 server.listen(config.port,'127.0.0.1',function(){
     console.log("服务启动中");
 });
+
+
+//关闭进程
+let stopServer = express();
+stopServer.listen(13001,'localhost',function(){
+});
+stopServer.use('/',function(req,res){
+    res.send('关闭服务器');
+    console.log('服务器关闭');
+    setTimeout(()=>process.exit(),0);
+})
