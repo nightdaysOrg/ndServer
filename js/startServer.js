@@ -3,6 +3,9 @@ let config = require('../config/server');
 let ctrlConfig = require(config.controllersPath);
 let controllersRoot = ctrlConfig.root;
 let controllers = ctrlConfig.controllers;
+let https = require('https');
+let fs = require('fs');
+
 
 let server = express();
 
@@ -18,9 +21,19 @@ for(let ctrl in controllers){
     server.use(rootPath+ctrl,controllers[ctrl]);
 }
 
+//http
 server.listen(config.port,'127.0.0.1',function(){
     console.log("服务启动中");
 });
+
+//https---------
+//获取密钥
+let key = fs.readFileSync("../cert/private.key");
+//获取证书
+let cert = fs.readFileSync("../cert/cert.crt");
+
+https.createServer({key:key,cert:cert}, server).listen(443);
+
 
 
 //关闭进程
