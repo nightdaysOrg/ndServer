@@ -1,8 +1,5 @@
 let express = require('express');
 let config = require('../config/server');
-let ctrlConfig = require(config.controllersPath);
-let controllersRoot = ctrlConfig.root;
-let controllers = ctrlConfig.controllers;
 let https = require('https');
 let fs = require('fs');
 
@@ -12,16 +9,22 @@ let server = express();
 //前端资源
 server.use('/', express.static(config.staticResourcePath));
 
-let rootPath = "/";
-if (controllersRoot) {
-    rootPath += controllersRoot + "/";
-}
-//后端资源
-if (controllers) {
-    for (let ctrl in controllers) {
-        server.use(rootPath + ctrl, controllers[ctrl]);
+//后端资源 加载
+if (config.controllersPath) {
+    let ctrlConfig = require(config.controllersPath);
+    let controllersRoot = ctrlConfig.root;
+    let controllers = ctrlConfig.controllers;
+    let rootPath = "/";
+    if (controllersRoot) {
+        rootPath += controllersRoot + "/";
+    }
+    if (controllers) {
+        for (let ctrl in controllers) {
+            server.use(rootPath + ctrl, controllers[ctrl]);
+        }
     }
 }
+
 
 
 //http
