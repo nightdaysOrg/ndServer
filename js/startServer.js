@@ -2,9 +2,12 @@ let express = require('express');
 let config = require('../config/server');
 let https = require('https');
 let fs = require('fs');
+let bodyParser = require('body-parser');
 
 
 let server = express();
+
+server.use(bodyParser.json());
 
 //前端资源
 server.use('/', express.static(config.staticResourcePath));
