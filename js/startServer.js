@@ -10,19 +10,22 @@ let fs = require('fs');
 let server = express();
 
 //前端资源
-server.use('/',express.static(config.staticResourcePath));
+server.use('/', express.static(config.staticResourcePath));
 
 let rootPath = "/";
-if(controllersRoot){
+if (controllersRoot) {
     rootPath += controllersRoot + "/";
 }
 //后端资源
-for(let ctrl in controllers){
-    server.use(rootPath+ctrl,controllers[ctrl]);
+if (controllers) {
+    for (let ctrl in controllers) {
+        server.use(rootPath + ctrl, controllers[ctrl]);
+    }
 }
 
+
 //http
-server.listen(config.port,'127.0.0.1',function(){
+server.listen(config.port, '127.0.0.1', function () {
     console.log("服务启动中");
 });
 
@@ -32,16 +35,16 @@ let key = fs.readFileSync("../cert/private.key");
 //获取证书
 let cert = fs.readFileSync("../cert/cert.crt");
 
-https.createServer({key:key,cert:cert}, server).listen(443);
+https.createServer({ key: key, cert: cert }, server).listen(443);
 
 
 
 //关闭进程
 let stopServer = express();
-stopServer.listen(13001,'localhost',function(){
+stopServer.listen(13001, 'localhost', function () {
 });
-stopServer.use('/',function(req,res){
+stopServer.use('/', function (req, res) {
     res.send('关闭服务器');
     console.log('服务器关闭');
-    setTimeout(()=>process.exit(),0);
+    setTimeout(() => process.exit(), 0);
 })
