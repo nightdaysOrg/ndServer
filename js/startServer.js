@@ -58,12 +58,15 @@ server.listen(config.port, '127.0.0.1', function () {
 });
 
 //https---------
-//获取密钥
-let key = fs.readFileSync("../cert/private.key");
-//获取证书
-let cert = fs.readFileSync("../cert/cert.crt");
+if (config.httpsPath) {
+    //获取密钥
+    let key = fs.readFileSync(config.httpsPath + "/cert/private.key");
+    //获取证书
+    let cert = fs.readFileSync(config.httpsPath + "/cert/cert.crt");
 
-https.createServer({ key: key, cert: cert }, server).listen(443);
+    https.createServer({ key: key, cert: cert }, server).listen(config.httpsPort);
+}
+
 
 
 
