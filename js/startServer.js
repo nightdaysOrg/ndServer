@@ -1,5 +1,5 @@
 let express = require('express');
-let config = require('../config/server');
+let config = require('../config/config');
 let https = require('https');
 let fs = require('fs');
 let bodyParser = require('body-parser');
@@ -72,7 +72,7 @@ if (config.httpsPath) {
 
 //关闭进程
 let stopServer = express();
-stopServer.listen(13001, 'localhost', function () {
+stopServer.listen(config.closePort, 'localhost', function () {
 });
 stopServer.use('/', function (req, res) {
     res.send('关闭服务器');

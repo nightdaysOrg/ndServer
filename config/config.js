@@ -9,11 +9,15 @@ const httpsPath = ``;
 //https 端口号 默认为443
 const httpsPort = 443;
 
+//服务器关闭端口号 13001
+const closePort = 13001; 
+
 module.exports = {
     port:port,
     staticResourcePath : staticResourcePath.trim(),
     controllersPath : controllersPath.trim(),
     httpsPath : httpsPath.trim(),
-    httpsPort : httpsPort
+    httpsPort : httpsPort,
+    closePort : closePort
 }
 
