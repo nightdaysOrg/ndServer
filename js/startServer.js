@@ -12,6 +12,15 @@ server.use(bodyParser.json());
 //前端资源
 server.use('/', express.static(config.staticResourcePath));
 
+//跨域处理
+server.all('*', function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
+
 //后端资源 加载
 if (config.controllersPath) {
     let ctrlConfig = require(config.controllersPath);
