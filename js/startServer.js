@@ -33,7 +33,7 @@ if (config.controllersPath) {
     if (controllers) {
         for (let ctrl in controllers) {
             server.use(rootPath + ctrl, function(req,res) {
-                cors(res);
+                // cors(res);
                 controllers[ctrl](req,res);
             } );
         }
