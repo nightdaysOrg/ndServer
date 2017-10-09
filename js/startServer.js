@@ -3,6 +3,8 @@ let config = require('../config/server');
 let https = require('https');
 let fs = require('fs');
 let bodyParser = require('body-parser');
+let multer = require('multer');
+let upload = multer();
 
 
 let server = express();
@@ -14,7 +16,6 @@ server.use('/', express.static(config.staticResourcePath));
 
 //跨域处理
 function cors(res) {
-    console.log("进入跨域处理");
     res.header("Access-Control-Allow-Origin", "*");
     res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -32,10 +33,19 @@ if (config.controllersPath) {
     }
     if (controllers) {
         for (let ctrl in controllers) {
-            server.use(rootPath + ctrl, function(req,res) {
-                // cors(res);
-                controllers[ctrl](req,res);
-            } );
+            if (ctrl.indexOf("upload") > -1) {
+                server.use(rootPath + ctrl, upload.any(), function (req, res) {
+                    // cors(res);
+                    controllers[ctrl](req, res);
+                });
+            } else {
+                server.use(rootPath + ctrl, function (req, res) {
+                    // cors(res);
+                    controllers[ctrl](req, res);
+                });
+            }
+
+
         }
     }
 }
