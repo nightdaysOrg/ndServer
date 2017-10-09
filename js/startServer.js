@@ -14,6 +14,7 @@ server.use('/', express.static(config.staticResourcePath));
 
 //跨域处理
 function cors(res) {
+    console.log("进入跨域处理");
     res.header("Access-Control-Allow-Origin", "*");
     res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
