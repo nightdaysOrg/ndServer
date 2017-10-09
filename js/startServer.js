@@ -60,9 +60,9 @@ server.listen(config.port, '127.0.0.1', function () {
 //https---------
 if (config.httpsPath) {
     //获取密钥
-    let key = fs.readFileSync(config.httpsPath + "/cert/private.key");
+    let key = fs.readFileSync(config.httpsPath + "/private.key");
     //获取证书
-    let cert = fs.readFileSync(config.httpsPath + "/cert/cert.crt");
+    let cert = fs.readFileSync(config.httpsPath + "/cert.crt");
 
     https.createServer({ key: key, cert: cert }, server).listen(config.httpsPort);
 }
