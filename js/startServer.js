@@ -13,13 +13,12 @@ server.use(bodyParser.json());
 server.use('/', express.static(config.staticResourcePath));
 
 //跨域处理
-server.all('*', function (req, res, next) {
+function cors(res) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     res.header('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-});
+}
 
 //后端资源 加载
 if (config.controllersPath) {
@@ -32,7 +31,10 @@ if (config.controllersPath) {
     }
     if (controllers) {
         for (let ctrl in controllers) {
-            server.use(rootPath + ctrl, controllers[ctrl]);
+            server.use(rootPath + ctrl, function(req,res) {
+                cors(res);
+                controllers[ctrl](req,res);
+            } );
         }
     }
 }
