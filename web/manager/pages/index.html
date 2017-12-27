@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <script src="js/util.js"></script>
+    </head>
+    <body>
+
+        <div id="list">
+
+        </div>
+
+        <!-- <button onclick="openServer()">开启</button>
+        <button onclick="closeServer()">关闭</button> -->
+
+        <script>
+            var list = document.getElementById("list");
+
+            async function getServerList(){
+                let result = await api.getServerList();
+                for(var i=0; i<result.length ; i++){
+                    var elem = createElement("div","");
+                    var open = createElement("button","开启" , elem);
+                    var close = createElement("button","关闭", elem);
+                    var port = createElement("span", result[i].port , elem);
+                    list.appendChild(elem);
+                }
+            }
+
+            getServerList();
+
+            async function closeServer() {
+                await api.closeServer();
+            }
+
+            async function openServer() {
+                await api.openServer();
+            }
+
+            
+
+        </script>
+    </body>
+</html>
