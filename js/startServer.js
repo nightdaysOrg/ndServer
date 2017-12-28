@@ -27,3 +27,14 @@ serverManager.init();
 adminServer.listen(8888,function(){
     console.log("服务器启动8888")
 });
+
+
+//关闭进程
+let stopServer = express();
+stopServer.listen(3370, 'localhost', function () {
+});
+stopServer.use('/', function (req, res) {
+    res.send('关闭服务器');
+    console.log('服务器关闭');
+    setTimeout(() => process.exit(), 0);
+})

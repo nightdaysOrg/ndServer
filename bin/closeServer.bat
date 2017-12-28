@@ -1,1 +1,1 @@
-node ../js/closeServer.js
+node ../js/stopServer.js

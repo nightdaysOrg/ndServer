@@ -1,9 +1,8 @@
 let http = require('http');
-let config = require('../config/config');
 
 let options = {
     path:'/',
-    port: config.closePort
+    port: 3370
 }
 
 let req = http.request(options,function(res){
