@@ -18,14 +18,20 @@
         return new Promise(function(resolve){
             var xhr = new XMLHttpRequest();
             xhr.open(method,url);
+            xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
             xhr.onload = function(e){
                 resolve(JSON.parse(e.currentTarget.responseText));
             }
-            xhr.send(data);
+            xhr.send(JSON.stringify(data));
         });
     }
 
-    w.url = "http://localhost:8888/";
+    if(navigator.platform.indexOf("Linux")>-1) {
+        w.url = "http://www.nightdays.net:8888/";
+    }else{
+        w.url = "http://localhost:8888/";
+    }
 
     w.post = function(path){
         return function(data){

@@ -4,6 +4,11 @@
             "path" : "test",
             "static" : ["../web/test/static"],
             "controller": ["../../web/test/controller.js"]
+        },
+        "fileSystem": {
+            "path" : "fs",
+            "static" : ["E:/myitem/fileSystem/static"],
+            "controller": ["E:/myitem/fileSystem/controller/controller.js"]
         }
     }
 }

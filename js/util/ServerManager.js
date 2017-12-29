@@ -8,6 +8,8 @@ function Server(port) {
 }
 
 Server.prototype.create = function() {
+
+    delete require.cache[require.resolve("../../server/config.json")];
     let config = require("../../server/config.json");
     this._server = loadServer(this.port, config[this.port]);
 }
@@ -38,7 +40,7 @@ Server.prototype.close = function(cb) {
 
 
 function ServerManager() {
-    this.list = [];
+    this.list = new Map();
     this.index = 0;
 }
 
@@ -46,7 +48,7 @@ ServerManager.prototype.createServer = function(port) {
     var server = new Server(port);
     server.id = this.index++;
     server.open();
-    this.list.push(server);
+    this.list.set(port, server);
 }
 
 ServerManager.prototype.init = function(){

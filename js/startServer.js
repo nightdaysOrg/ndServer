@@ -11,15 +11,21 @@ let serverManager = require("./util/ServerManager");
 
 let cors = require("./util/cors")
 
+//*admin 管理项目 */
+
 var admin = express();
 var adminServer = http.createServer(admin);
 
+admin.use(bodyParser.json());
 admin.use("/",express.static("../web/manager/pages"));
 loadContrl(admin, require("../web/manager/controller") , function(req,res,next){
     //处理跨域
     cors(res);
 });
 
+//*admin 管理项目 */
+
+//加载其他项目
 serverManager.init();
 
 

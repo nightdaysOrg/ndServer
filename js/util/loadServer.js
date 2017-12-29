@@ -31,6 +31,7 @@ function makeItem( item, app) {
 
 function makeServer(port, config) {
     var app = express();
+    app.use(bodyParser.json());
     var server = http.createServer(app);
 
     for (let name in config) {
