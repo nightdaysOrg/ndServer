@@ -6,6 +6,8 @@ let bodyParser = require('body-parser');
 let multer = require('multer');
 let upload = multer();
 
+let cors = require("./util/cors");
+
 let config = require("../../server/config");
 
 
@@ -23,7 +25,10 @@ function makeItem( item, app) {
     for (let controllerPath of item.controller) {
         //重启服务器 清楚缓存
         delete require.cache[require.resolve(controllerPath)];
-        loadContrl(app , require(controllerPath) , pathName);
+        loadContrl(app , require(controllerPath) , pathName , function(req,res,next) {
+            //跨域处理
+            cors(res);
+        });
     }
 
 
