@@ -6,7 +6,7 @@ let bodyParser = require('body-parser');
 let multer = require('multer');
 let upload = multer();
 
-let cors = require("./util/cors");
+let cors = require("./cors");
 
 let config = require("../../server/config");
 
