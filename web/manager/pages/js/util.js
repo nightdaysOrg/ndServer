@@ -27,7 +27,7 @@
         });
     }
 
-    if(navigator.platform.indexOf("Linux")>-1) {
+    if(location.origin.indexOf("www.nightdays.net")>-1) {
         w.url = "http://www.nightdays.net:8888/";
     }else{
         w.url = "http://localhost:8888/";
