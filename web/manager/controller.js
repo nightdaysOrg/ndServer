@@ -4,42 +4,46 @@ module.exports =  {
         res.send('Hello');
     },
 
-    getServerList:function(req,res,next,server){
-        var list = [];
-        for(let [key,value] of server.list){
-            let statusText = "初始化中";
-            switch (value.status) {
-                case 0: statusText = "初始化中"; break;
-                case 1: statusText = "启动中"; break;
-                case 2: statusText = "已启动"; break;
-                case 3: statusText = "停止中"; break;
-                case 4: statusText = "已停止"; break;
-            }
-            list.push({port: key , id: value.id , status: statusText}); //0 初始化中 1 启动中 2 已启动  3 停止中 4 已停止 
-        }
-        res.send(list);
+    getServer:function(req,res,next,serverManager){
+        let temp = {};
+        temp.port = serverManager.server && serverManager.server.port  || '';
+        temp.items = serverManager.server && serverManager.server.items || [];
+        temp.status = serverManager.server.status;
+        res.send(temp);
     },
 
-    closeServer: function(req,res,next,server){
-        let serverInst = server.list.get(req.body.port+"");
-        if(!serverInst){
+    closeServer: function(req,res,next,serverManager){
+        serverManager.close(function(){
             res.send({success: true});
-            return;
-        }
-        serverInst.close(function(){
+        });
+        // let serverInst = server.list.get(req.body.port+"");
+        // if(!serverInst){
+        //     res.send({success: true});
+        //     return;
+        // }
+        // serverInst.close(function(){
+        //     res.send({success: true});
+        // });
+    },
+
+    restartServer: function(req,res,next,serverManager){
+        serverManager.restart(function(){
             res.send({success: true});
         });
     },
 
-    openServer: function(req,res,next,server){
-        let serverInst = server.list.get(req.body.port+"");
-        if(!serverInst){
-            res.send({success: true});
-            return;
-        }
-        serverInst.open(function(){
+    openServer: function(req,res,next,serverManager){
+        serverManager.start(function(){
             res.send({success: true});
         });
+        // let serverInst = server.list.get(req.body.port+"");
+        // if(!serverInst){
+        //     res.send({success: true});
+        //     return;
+        // }
+        // serverInst.open(function(){
+        //     res.send({success: true});
+        // });
     }
 
 }

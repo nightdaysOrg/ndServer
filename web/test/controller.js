@@ -1,7 +1,7 @@
 module.exports = {
 
     helloWorld: function(req,res) {
-        res.send("dddd");
+        res.send("xxxxxx");
     },
 
     empList: function(req,res) {

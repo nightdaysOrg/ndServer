@@ -41,8 +41,9 @@
 
 
     w.api = {
-        getServerList : post("getServerList"),
+        getServer : post("getServer"),
         openServer : post("openServer"),
+        restartServer : post("restartServer"),
         closeServer : post("closeServer")
     }
 

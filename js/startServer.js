@@ -7,32 +7,15 @@ let multer = require('multer');
 let upload = multer();
 
 let loadContrl = require("./util/loadController");
-let serverManager = require("./util/ServerManager");
 
-let cors = require("./util/cors")
+let AdminServer = require("./server/AdminServer");
+//ServerManager 管理某一个端口下的所有业务
+
 
 //*admin 管理项目 */
-
-var admin = express();
-var adminServer = http.createServer(admin);
-
-admin.use(bodyParser.json());
-admin.use("/",express.static("../web/manager/pages"));
-loadContrl(admin, require("../web/manager/controller") , function(req,res,next){
-    //处理跨域
-    cors(res);
-});
-
+new AdminServer();
 //*admin 管理项目 */
 
-//加载其他项目
-serverManager.init();
-
-
-
-adminServer.listen(8888,function(){
-    console.log("服务器启动8888")
-});
 
 
 //关闭进程

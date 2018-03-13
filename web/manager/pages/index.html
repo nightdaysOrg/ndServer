@@ -1,27 +1,81 @@
 <html>
     <head>
         <script src="js/util.js"></script>
-        <script src="js/component.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
     </head>
     <body>
-
-        <div id="list">
-
+        <div id="app" style="width: 50%; margin: 10% auto 0;">
+                <div style="margin-bottom: 20px;text-align: center">欢迎来到ndServer</div>
+                <div style="text-align: center">
+                    状态: {{getStatusText()}}
+                    <div>{{port ? ('当前服务使用的端口号位' + port) : '当前服务没有开启'}}</div>
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button @click="openServer" v-show="this.status == 0 || this.status == 4">启动服务</button>
+                    <button @click="restartServer" v-show="this.status == 2">重启服务</button>
+                    <button @click="closeServer" v-show="this.status == 2">关闭服务</button>
+                </div>
+                <div style="text-align: center">
+                    <div v-for="item of items" style="display: inline-block;text-align: left">
+                        <div>项目名: {{item.name}}</div>
+                        <div>项目路径: {{item.path}}</div>
+                        <div>前端路径 : {{item.front}}</div>
+                        <div>后端路径 : {{item.back}}</div>
+                    </div>
+                </div>
         </div>
 
         <script>
-            var list = document.getElementById("list");
+            new Vue({
+                el: '#app',
+                data: {
+                    port: "",
+                    status: "",
+                    items: []
+                },
+                mounted(){
+                    this.getServer();
+                },
+                methods: {
+                    getStatusText() {
+                        switch(this.status) {
+                            case 0 : return "初始化中";
+                            case 1 : return "启动中";
+                            case 2 : return "已启动";
+                            case 3 : return "停止中";
+                            case 4 : return "已停止";
+                            default : return this.status;
+                        }
+                    },
+                    async getServer() {
+                        let result = await api.getServer();
+                        this.port = result.port;
+                        this.status = result.status;
+                        this.items = result.items;
+                    },
 
-            async function getServerList(){
-                let result = await api.getServerList();
-                for(var i=0; i<result.length ; i++){
-                    var elem = serverListRow(result[i]);
-                    list.appendChild(elem);
+                    async openServer() {
+                        let result = await api.openServer();
+                        if(result.success) {
+                            this.getServer();
+                        }
+                    },
+
+                    async restartServer() {
+                        let result = await api.restartServer();
+                        if(result.success) {
+                            this.getServer();
+                        }
+                    },
+
+                    async closeServer() {
+                        let result = await api.closeServer();
+                        if(result.success) {
+                            this.getServer();
+                        }
+                    }
                 }
-            }
-
-            getServerList();
-
+            })
         </script>
     </body>
 </html>
