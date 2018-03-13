@@ -4,3 +4,4 @@ package-lock.json
 cert/
 server/config.json
 config.json
+nohup.out
