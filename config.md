@@ -1,14 +1,11 @@
 {
-    "port": 8080,
+    "port": 8081,
     "items": [
         {
             "name" : "测试1",
-            "frontEnd" : "/asdf/asdf/asdf/dddd"
-        },
-        {
-            "name" : "测试2",
-            "frontEnd" : "/asdf/asdf/asdf/dddd",
-            "backEnd" : "/asdd/asdf/asdf/Controllers"
+            "path" : "test",
+            "front" : "E:/myitem/ndServerNew/web/test/static",
+            "back" : "E:/myitem/ndServerNew/web/test/controller.js"
         }
     ]
 }
