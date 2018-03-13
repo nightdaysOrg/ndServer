@@ -3,3 +3,4 @@ package-lock.json
 *.swp
 cert/
 server/config.json
+config.json

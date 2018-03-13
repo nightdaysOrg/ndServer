@@ -1,3 +1,4 @@
+#请在server目录下创建 config.json 格式按下面这种
 {
     "port": 8081,
     "items": [
