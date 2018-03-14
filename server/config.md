@@ -12,3 +12,8 @@
         }
     ]
 }
+
+#如果需要使用git自动拉取 ， 请在git上配置 webhooks
+#url为http://www.nightdays.net:8888/webhook?name=项目名字&url=backGit
+#name 就是项目的名字
+#url 是使用frontGit拉取 还是 使用 backGit拉取
