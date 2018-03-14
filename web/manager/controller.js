@@ -44,6 +44,13 @@ module.exports =  {
         // serverInst.open(function(){
         //     res.send({success: true});
         // });
+    },
+
+    gitPull: function(req,res,next,serverManager){
+        serverManager.gitPull(req.body.url,function() {
+            res.send({success: true});
+        });
     }
+
 
 }

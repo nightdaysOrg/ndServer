@@ -44,7 +44,8 @@
         getServer : post("getServer"),
         openServer : post("openServer"),
         restartServer : post("restartServer"),
-        closeServer : post("closeServer")
+        closeServer : post("closeServer"),
+        gitPull : post("gitPull")
     }
 
 })(window);
