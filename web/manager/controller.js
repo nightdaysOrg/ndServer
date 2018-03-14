@@ -8,9 +8,11 @@ module.exports =  {
     webhook: function(req,res,next,serverManager) {
         let name = req.query.name;
         let url = req.query.url;
+        console.log(name,url);
         for(let item of serverManager.server.items) {
             if(item.name == name) {
                 let gitUrl = item[url];
+                console.log(gitUrl);
                 serverManager.gitPull(gitUrl,function() {
                     res.send({success: true});
                 });

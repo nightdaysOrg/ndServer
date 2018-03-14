@@ -135,6 +135,9 @@
 
                     async gitPull(gitUrl) {
                         let result = await api.gitPull({ url: gitUrl});
+                        if(result.success) {
+                            alert("拉取成功");
+                        }
                     }
                 },
 
