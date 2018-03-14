@@ -1,4 +1,5 @@
 let Server = require("./Server");
+const { execSync } = require('child_process');
 
 module.exports=class ServerManager {
     constructor() {
@@ -22,6 +23,11 @@ module.exports=class ServerManager {
             console.log("关闭成功");
             cb();
         });
+    }
+
+    gitPull(url,cb) {
+        execSync("git pull", {cwd: url});
+        cb();
     }
 }
 
