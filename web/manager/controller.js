@@ -12,9 +12,10 @@ module.exports =  {
         for(let item of serverManager.server.items) {
             if(item.code == code) {
                 let gitUrl = item[url];
-                console.log(gitUrl);
                 serverManager.gitPull(gitUrl,function() {
-                    res.send({success: true});
+                    serverManager.restart(function(){
+                        res.send({success: true});
+                    });
                 });
             }
         }
