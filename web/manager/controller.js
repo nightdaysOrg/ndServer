@@ -1,7 +1,7 @@
 module.exports =  {
 
     helloWorld:function(req,res,next){
-        console.log("有更新了");
+        console.log(req);
         res.send('Hello');
     },
 
