@@ -65,9 +65,9 @@ class Server {
             if(exists) {
                 console.log("开启https");
                 //获取密钥
-                let key = fs.readFileSync("/nightdays/httpsCert/private.key");
+                let key = fs.readFileSync("/nightdays/cert/private.key");
                 //获取证书
-                let cert = fs.readFileSync("/nightdays/httpsCert/cert.crt");
+                let cert = fs.readFileSync("/nightdays/cert/cert.crt");
                 https.createServer({ key: key, cert: cert }, this.app).listen(403);
             }
         });
