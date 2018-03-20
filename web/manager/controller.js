@@ -1,11 +1,11 @@
 module.exports =  {
 
-    helloWorld:function(req,res,next){
+    helloWorld: function (req,res,next) {
         console.log(req.query);
         res.send('Hello');
     },
 
-    webhook: function(req,res,next,serverManager) {
+    webhook: function (req,res,next,serverManager) {
         let code = req.query.code;
         let url = req.query.url;
         console.log(code,url);
@@ -21,7 +21,7 @@ module.exports =  {
         }
     },
 
-    getServer:function(req,res,next,serverManager){
+    getServer: function (req,res,next,serverManager) {
         let temp = {};
         temp.port = serverManager.server && serverManager.server.port  || '';
         temp.items = serverManager.server && serverManager.server.items || [];
@@ -29,7 +29,7 @@ module.exports =  {
         res.send(temp);
     },
 
-    closeServer: function(req,res,next,serverManager){
+    closeServer: function (req,res,next,serverManager) {
         serverManager.close(function(){
             res.send({success: true});
         });
@@ -43,13 +43,13 @@ module.exports =  {
         // });
     },
 
-    restartServer: function(req,res,next,serverManager){
+    restartServer: function (req,res,next,serverManager) {
         serverManager.restart(function(){
             res.send({success: true});
         });
     },
 
-    openServer: function(req,res,next,serverManager){
+    openServer: function (req,res,next,serverManager) {
         serverManager.start(function(){
             res.send({success: true});
         });
@@ -63,7 +63,7 @@ module.exports =  {
         // });
     },
 
-    gitPull: function(req,res,next,serverManager){
+    gitPull: function (req,res,next,serverManager) {
         serverManager.gitPull(req.body.url,function() {
             res.send({success: true});
         });

@@ -13,7 +13,7 @@ let AdminServer = require("./server/AdminServer");
 
 
 //*admin 管理项目 */
-new AdminServer();
+let adminServer = new AdminServer();
 //*admin 管理项目 */
 
 

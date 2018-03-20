@@ -19,11 +19,11 @@ class AdminServer {
         this.frontEnd();
         this.backEnd();
         
-        this.app.listen(8888,function(){
-            console.log("总服务器启动8888")
+        this.app.listen(8888,()=>{
+            console.log("总服务器启动8888");
+            this.serverManager.start();
         });
     }
-
 
 
     requestConfig() {

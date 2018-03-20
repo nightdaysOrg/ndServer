@@ -55,7 +55,9 @@ class Server {
         this.httpServer.listen(this.port,()=>{
             console.log("服务器启动"+this.port);
             this.status = 2;
-            cb();
+            if(cb) {
+                cb();
+            }
         });
     }
 
@@ -63,7 +65,9 @@ class Server {
         this.status = 3;
         this.httpServer.close(()=>{
             this.status = 4;
-            cb();
+            if(cb) {
+                cb();
+            }
         });
     }
 
