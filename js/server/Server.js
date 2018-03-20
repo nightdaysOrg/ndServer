@@ -15,6 +15,7 @@ class Server {
         this.status = 0 ; //0 初始化中 1 启动中 2 已启动  3 停止中 4 已停止 
         this.app = express();
         this.httpServer = http.createServer(this.app);
+        this.httpsServer = null;
         this.requestConfig();
         this.loadServer();
       
@@ -68,7 +69,8 @@ class Server {
                 let key = fs.readFileSync("/nightdays/cert/private.key");
                 //获取证书
                 let cert = fs.readFileSync("/nightdays/cert/cert.crt");
-                https.createServer({ key: key, cert: cert }, this.app).listen(443);
+                this.httpsServer = https.createServer({ key: key, cert: cert }, this.app);
+                this.httpsServer.listen(443);
             }
         });
 
@@ -89,6 +91,12 @@ class Server {
                 cb();
             }
         });
+
+        if(this.httpsServer) {
+            this.httpsServer.close(()=>{
+                console.log("https 已经关闭");
+            });
+        }
     }
 
     backEnd(path , ctrlUrl) {
