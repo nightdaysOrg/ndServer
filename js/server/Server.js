@@ -68,7 +68,7 @@ class Server {
                 let key = fs.readFileSync("/nightdays/cert/private.key");
                 //获取证书
                 let cert = fs.readFileSync("/nightdays/cert/cert.crt");
-                https.createServer({ key: key, cert: cert }, this.app).listen(403);
+                https.createServer({ key: key, cert: cert }, this.app).listen(443);
             }
         });
 
