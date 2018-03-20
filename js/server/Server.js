@@ -59,6 +59,26 @@ class Server {
                 cb();
             }
         });
+
+
+        fs.exists("/nightdays/httpsCert" , (exists)=>{
+            if(exists) {
+                console.log("开启https");
+                //获取密钥
+                let key = fs.readFileSync("/nightdays/httpsCert/private.key");
+                //获取证书
+                let cert = fs.readFileSync("/nightdays/httpsCert/cert.crt");
+                https.createServer({ key: key, cert: cert }, this.app).listen(403);
+            }
+        });
+
+        // //获取密钥
+        // let key = fs.readFileSync(config.httpsPath + "/private.key");
+        // //获取证书
+        // let cert = fs.readFileSync(config.httpsPath + "/cert.crt");
+    
+        // https.createServer({ key: key, cert: cert }, server).listen(403);
+
     }
 
     close(cb) {
