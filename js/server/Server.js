@@ -79,7 +79,11 @@ class Server {
             this.app.use(path + "/" + key  , function(req,res,next){
                 //处理跨域
                 cors(res);
-                ctrl[key](req,res,next);
+                if(req.method.toUpperCase() != 'POST' && req.method.toUpperCase() != 'GET') {
+                    res.send("跨域检测完成");
+                }else {
+                    ctrl[key](req,res,next);
+                }
             });
         }
 
