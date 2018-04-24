@@ -12,9 +12,13 @@ module.exports =  {
         for(let item of serverManager.server.items) {
             if(item.code == code) {
                 let gitUrl = item[url];
+                let noPullRestart = item["noPullRestart"];
                 serverManager.gitPull(gitUrl,function() {
+                    if(noPullRestart){
+                        return;
+                    }
                     serverManager.restart(function(){
-                        res.send({success: true});
+                            res.send({success: true});
                     });
                 });
             }
