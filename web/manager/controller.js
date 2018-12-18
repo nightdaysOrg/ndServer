@@ -8,7 +8,6 @@ module.exports =  {
     webhook: function (req,res,next,serverManager) {
         let code = req.query.code;
         let url = req.query.url;
-        console.log(code,url);
         for(let item of serverManager.server.items) {
             if(item.code == code) {
                 let gitUrl = item[url];
@@ -71,7 +70,19 @@ module.exports =  {
         serverManager.gitPull(req.body.url,function() {
             res.send({success: true});
         });
+    },
+
+    addServer: function(req, res, next , serverManager){
+        serverManager.addServer(req.body , function(e) {
+            if(!e) {
+                res.send({success: true});
+            } else {
+                res.send({success: false , errmsg : '已经存在该项目'});
+            }
+        })
     }
+
+
 
 
 }

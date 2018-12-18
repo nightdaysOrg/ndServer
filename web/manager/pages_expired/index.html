@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <script src="js/util.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+
+        <style>
+            .items {
+                margin-top: 20px;
+            }
+
+            .item {
+                min-width: 500px;
+                border: 1px solid black;
+                border-radius: 4px;
+                padding: 5px;
+                margin-top: 10px;
+            }
+
+            .save-btn {
+                border-radius: 4px;
+                border: 1px solid black;
+            }
+
+            .flex-between {
+                display:flex;
+                justify-content: space-between;
+            }
+
+            .mt-10 {
+                margin-top: 10px;
+            }
+
+
+        </style>
+    </head>
+    <body>
+        <div id="app" style="width: 50%; margin: 5% auto 0;">
+                <div style="margin-bottom: 20px;text-align: center">欢迎来到ndServer</div>
+                <div style="text-align: center">
+                    状态: {{getStatusText()}}
+                    <div>{{port ? ('当前服务使用的端口号位' + port) : '当前服务没有开启'}}</div>
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button @click="openServer" v-show="this.status == 0 || this.status == 4">启动服务</button>
+                    <button @click="restartServer" v-show="this.status == 2">重启服务</button>
+                    <button @click="closeServer" v-show="this.status == 2">关闭服务</button>
+                </div>
+                <div style="text-align: center" class="items">
+                    <div style="margin-bottom: 10px;"><button @click="showAddBlock">新增项目</button></div>
+                    <div v-for="item of items" >
+                        <div  class="item" style="display: inline-block;text-align: left">
+                            <div style="">
+                                <span>项目名: <input @click="showEdit" v-focus :value="item.name" disabled="true"   /></span>
+                                <span>
+                                    <!-- <button class="save-btn">保存</button> -->
+                                </span>
+                            </div>
+                            <div>项目路径: {{item.path}}</div>
+                            <div class="flex-between">
+                                <span>前端路径 : {{item.front}}</span>
+                            </div>
+                            <div class="flex-between mt-10">
+                                <span>前端git : {{item.frontGit}}</span>
+                                <button class="save-btn" @click="gitPull(item.backGit)">重新拉取</button>
+                            </div>
+                            <div class="flex-between mt-10">
+                                <span>后端路径 : {{item.back}}</span>
+                            </div>
+                            <div class="flex-between mt-10">
+                                <span>后端git : {{item.backGit}}</span>
+                                <button class="save-btn" @click="gitPull(item.backGit)">重新拉取</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+        <script>
+            new Vue({
+                el: '#app',
+                data: {
+                    port: "",
+                    status: "",
+                    items: []
+                },
+                mounted(){
+                    this.getServer();
+                },
+                methods: {
+                    getStatusText() {
+                        switch(this.status) {
+                            case 0 : return "未启动";
+                            case 1 : return "启动中";
+                            case 2 : return "已启动";
+                            case 3 : return "停止中";
+                            case 4 : return "已停止";
+                            default : return this.status;
+                        }
+                    },
+                    async getServer() {
+                        let result = await api.getServer();
+                        this.port = result.port;
+                        this.status = result.status;
+                        this.items = result.items;
+                    },
+
+                    async openServer() {
+                        let result = await api.openServer();
+                        if(result.success) {
+                            this.getServer();
+                        }
+                    },
+
+                    async restartServer() {
+                        let result = await api.restartServer();
+                        if(result.success) {
+                            this.getServer();
+                        }
+                    },
+
+                    async closeServer() {
+                        let result = await api.closeServer();
+                        if(result.success) {
+                            this.getServer();
+                        }
+                    },
+                    
+                    showAddBlock() {
+                        this.items.push({});
+                    },
+
+                    showEdit(e) {
+                        e.target.disabled = false;
+                    },
+
+                    async gitPull(gitUrl) {
+                        let result = await api.gitPull({ url: gitUrl});
+                        if(result.success) {
+                            alert("拉取成功");
+                        }
+                    }
+                },
+
+                directives : {
+                    focus : {
+                        update(el){
+                            console.log(el);
+                            el.focus();
+                        }
+                    }
+                },
+            })
+        </script>
+    </body>
+</html>

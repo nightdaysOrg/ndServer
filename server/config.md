@@ -18,3 +18,4 @@
 #url为http://www.nightdays.net:8888/webhook?code=项目代码&url=backGit
 #code 就是项目的代码
 #url 是使用frontGit拉取 还是 使用 backGit拉取
+#这个分支不支持 多端口 请不要使用多端口

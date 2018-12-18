@@ -27,6 +27,7 @@ class Server {
 
 
     loadJSONFile() {
+        //由于存在缓存 导致重新拉项目不会更新 必须重启服务器 为了防止这种情况 清除所有缓存
         delete require.cache[require.resolve("../../server/config.json")];
         let config = require("../../server/config.json");
         if(!config.port || !config.items || !config.items instanceof Array) {
@@ -37,6 +38,7 @@ class Server {
         return true;
     }
 
+    //开始加载整个配置文件中的项目
     loadServer() {
       
         for(let item of this.items) {
@@ -53,6 +55,8 @@ class Server {
 
     open(cb) {
         this.status = 1;
+
+        //开启http的服务
         this.httpServer.listen(this.port,()=>{
             console.log("服务器启动"+this.port);
             this.status = 2;
@@ -62,6 +66,7 @@ class Server {
         });
 
 
+        //如果存在证书文件 开启https 的服务
         fs.exists("/nightdays/httpsCert" , (exists)=>{
             if(exists) {
                 console.log("开启https");
