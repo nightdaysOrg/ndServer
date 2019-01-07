@@ -1,5 +1,5 @@
 const path = require('path');
-const {fork} = require('child_process');
+const {fork , execSync} = require('child_process');
 
 const __base = path.resolve(__dirname , '../../');
 
@@ -30,6 +30,12 @@ class ProcessManager {
         this.process.kill();
         console.log("关闭成功");
         cb && cb();
+    }
+
+    //拉取项目
+    gitPull(url, cb) {
+        execSync("git pull", { cwd: url });
+        cb();
     }
 }
 
