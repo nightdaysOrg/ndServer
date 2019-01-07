@@ -1,8 +1,6 @@
 module.exports =  {
 
     helloWorld: function (req,res,next) {
-        process.serverManager.send("hellow");
-        console.log(req.data);
         res.send('Hello');
     },
 

@@ -14,17 +14,19 @@ const managerOption = {
   ]
 };
 
+let processManager;
+
 //主进程入口
 function start() {
   //管理子进程
-  let processManager = new ProcessManager(
+  processManager = new ProcessManager(
     path.resolve(__base, "js/server/ServerManager")
   );
-
-  this._manager = new Server(processManager);
-  this._manager.init(managerOption);
-  this._manager.start(() => {
-    console.log("管理服务器启动：" + this._manager.port);
+  
+  const _manager = new Server(processManager);
+  _manager.init(managerOption);
+  _manager.start(() => {
+    console.log("管理服务器启动：" + _manager.port);
     processManager.start();
   });
 }
@@ -36,6 +38,9 @@ function stop() {
   stopServer.use("/", function(req, res) {
     res.send("关闭服务器");
     console.log("总服务器关闭");
+    if(processManager && processManager.process) {
+      processManager.process.exit();
+    }
     setTimeout(() => process.exit(), 0);
   });
 }

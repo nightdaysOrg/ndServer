@@ -21,6 +21,7 @@ class ProcessManager {
         this.process.kill();
         console.log("关闭成功");
         console.log("开始重启web服务器");
+        this.process = null;
         this.start();
         cb && cb();
     }
@@ -29,6 +30,7 @@ class ProcessManager {
         console.log("开始关闭web服务器");
         this.process.kill();
         console.log("关闭成功");
+        this.process = null;
         cb && cb();
     }
 
