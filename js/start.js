@@ -39,7 +39,7 @@ function stop() {
     res.send("关闭服务器");
     console.log("总服务器关闭");
     if(processManager && processManager.process) {
-      processManager.process.exit();
+      processManager.process.kill();
     }
     setTimeout(() => process.exit(), 0);
   });
