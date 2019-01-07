@@ -3,5 +3,6 @@ package-lock.json
 *.swp
 cert/
 server/config.json
+config/config.json
 config.json
 nohup.out

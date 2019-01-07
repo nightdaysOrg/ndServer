@@ -1,13 +1,14 @@
 module.exports =  {
 
     helloWorld: function (req,res,next) {
-        console.log(req.query);
+        process.serverManager.send("hellow");
+        console.log(req.data);
         res.send('Hello');
     },
 
     webhook: function (req,res,next,serverManager) {
-        let code = req.query.code;
-        let url = req.query.url;
+        let code = req.data.code;
+        let url = req.data.url;
         for(let item of serverManager.server.items) {
             if(item.code == code) {
                 let gitUrl = item[url];
@@ -36,7 +37,7 @@ module.exports =  {
         serverManager.close(function(){
             res.send({success: true});
         });
-        // let serverInst = server.list.get(req.body.port+"");
+        // let serverInst = server.list.get(req.data.port+"");
         // if(!serverInst){
         //     res.send({success: true});
         //     return;
@@ -56,7 +57,7 @@ module.exports =  {
         serverManager.start(function(){
             res.send({success: true});
         });
-        // let serverInst = server.list.get(req.body.port+"");
+        // let serverInst = server.list.get(req.data.port+"");
         // if(!serverInst){
         //     res.send({success: true});
         //     return;
@@ -67,13 +68,13 @@ module.exports =  {
     },
 
     gitPull: function (req,res,next,serverManager) {
-        serverManager.gitPull(req.body.url,function() {
+        serverManager.gitPull(req.data.url,function() {
             res.send({success: true});
         });
     },
 
     addServer: function(req, res, next , serverManager){
-        serverManager.addServer(req.body , function(e) {
+        serverManager.addServer(req.data , function(e) {
             if(!e) {
                 res.send({success: true});
             } else {
