@@ -8,10 +8,9 @@ module.exports =  {
 
     webhook: function (req,res,next,serverManager) {
         let code = req.data.code;
-        let url = req.data.url;
         for(let item of serverManager.server.items) {
             if(item.code == code) {
-                let gitUrl = item[url];
+                let gitUrl = item["git"];
                 let noPullRestart = item["noPullRestart"];
                 serverManager.gitPull(gitUrl,function() {
                     if(noPullRestart){
@@ -37,14 +36,6 @@ module.exports =  {
         serverManager.close(function(){
             res.send({success: true});
         });
-        // let serverInst = server.list.get(req.data.port+"");
-        // if(!serverInst){
-        //     res.send({success: true});
-        //     return;
-        // }
-        // serverInst.close(function(){
-        //     res.send({success: true});
-        // });
     },
 
     restartServer: function (req,res,next,serverManager) {
@@ -57,14 +48,6 @@ module.exports =  {
         serverManager.start(function(){
             res.send({success: true});
         });
-        // let serverInst = server.list.get(req.data.port+"");
-        // if(!serverInst){
-        //     res.send({success: true});
-        //     return;
-        // }
-        // serverInst.open(function(){
-        //     res.send({success: true});
-        // });
     },
 
     gitPull: function (req,res,next,serverManager) {
