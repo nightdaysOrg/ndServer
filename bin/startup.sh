@@ -1,2 +1,2 @@
 #!/bin/sh
-nohup node ../js/startServer.js &
+nohup node ../js/start.js &

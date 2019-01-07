@@ -1,1 +1,1 @@
-node ../js/startServer.js
+node ../js/start.js
