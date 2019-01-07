@@ -1,3 +1,8 @@
+/**
+ * 
+ *  处理跨域问题
+ * 
+ */
 module.exports = function cors(res) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');

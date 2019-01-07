@@ -1,127 +1,99 @@
-let express = require('express');
-let http = require('http');
-let https = require('https');
-let fs = require('fs');
-let bodyParser = require('body-parser');
-let multer = require('multer');
-let upload = multer();
-
+let express = require("express");
+let http = require("http");
+let https = require("https");
 let cors = require("../util/cors")
+let bodyParser = require('body-parser');
 
 class Server {
-    constructor() {
-        let flag = this.loadJSONFile();
-        if(!flag) return;
-        this.status = 0 ; //0 初始化中 1 启动中 2 已启动  3 停止中 4 已停止 
-        this.app = express();
-        this.httpServer = http.createServer(this.app);
-        this.httpsServer = null;
-        this.requestConfig();
-        this.loadServer();
-      
+  constructor() {
+    this.items = [];
+    this.serverConfig = new express();
+    this._server = http.createServer(this.serverConfig);
+  }
+
+  init(option) {
+
+    //配置服务器参数
+    this.config(option);
+
+    //配置服务器请求路由
+    for (let item of option.items) {
+      this.items.push(item);
+
+       //根据配置文件中的 items 处理项目
+      this.build(item);
     }
+  }
 
-    requestConfig() {
-        this.app.use(bodyParser.json());
-    }
+  config(option) {
+    this.status = 0 ; //0 初始化中 1 启动中 2 已启动  3 停止中 4 已停止 
 
-
-    loadJSONFile() {
-        //由于存在缓存 导致重新拉项目不会更新 必须重启服务器 为了防止这种情况 清除所有缓存
-        delete require.cache[require.resolve("../../server/config.json")];
-        let config = require("../../server/config.json");
-        if(!config.port || !config.items || !config.items instanceof Array) {
-            return false;
-        }
-        this.port = config.port;
-        this.items = config.items;
-        return true;
-    }
-
-    //开始加载整个配置文件中的项目
-    loadServer() {
-      
-        for(let item of this.items) {
-            let path = item.path || "";
-            path = "/" + path;
-            if(item.front) {
-                this.app.use(path , express.static(item.front));
-            }
-            if(item.back) {
-                this.backEnd(path , item.back);
-            }
-        }
-    }
-
-    open(cb) {
-        this.status = 1;
-
-        //开启http的服务
-        this.httpServer.listen(this.port,()=>{
-            console.log("服务器启动"+this.port);
-            this.status = 2;
-            if(cb) {
-                cb();
-            }
-        });
-
-
-        //如果存在证书文件 开启https 的服务
-        fs.exists("/nightdays/httpsCert" , (exists)=>{
-            if(exists) {
-                console.log("开启https");
-                //获取密钥
-                let key = fs.readFileSync("/nightdays/cert/private.key");
-                //获取证书
-                let cert = fs.readFileSync("/nightdays/cert/cert.crt");
-                this.httpsServer = https.createServer({ key: key, cert: cert }, this.app);
-                this.httpsServer.listen(443);
-            }
-        });
-
-        // //获取密钥
-        // let key = fs.readFileSync(config.httpsPath + "/private.key");
-        // //获取证书
-        // let cert = fs.readFileSync(config.httpsPath + "/cert.crt");
+    //端口号
+    this.port = option.port;
     
-        // https.createServer({ key: key, cert: cert }, server).listen(403);
+    // 配置请求处理方式 application/json
+    this.serverConfig.use(bodyParser.json());
+    //配置请求处理方式 application/x-www-form-urlencoded
+    this.serverConfig.use(bodyParser.urlencoded({extended: false})); 
 
+  }
+
+  build(item) {
+    let path = item.path || "";
+    if (item.front) {
+      //如果配置项存在front 则作为前端项目处理
+      this.buildFront(path, item.front);
+    } else if (item.back) {
+      //如果配置项存在back  则作为后端项目处理
+      this.buildBack(path, item.back);
     }
+  }
 
-    close(cb) {
-        this.status = 3;
-        this.httpServer.close(()=>{
-            this.status = 4;
-            if(cb) {
-                cb();
-            }
-        });
+  buildFront(path, front) {
+    this.serverConfig.use("/" + path, express.static(front));
+  }
 
-        if(this.httpsServer) {
-            this.httpsServer.close(()=>{
-                console.log("https 已经关闭");
-            });
+  buildBack(path, back) {
+    //后端必须配置请求处理controller
+    let controllerList = require(back);
+    for(let controllerName in controllerList) {
+      let p = path ? path + "/" + controllerName : controllerName;
+      let controller = controllerList[controllerName];
+      this.makeController(p , controller);
+    }
+  }
+
+  makeController(path , controller) {
+    this.serverConfig.use( "/" +  path , (req , res , next)=>{
+        //处理跨域
+        cors(res);
+        if(req.method.toUpperCase() != 'POST' && req.method.toUpperCase() != 'GET') {
+            res.send("跨域检测完成");
+        }else {
+          if(req.method.toUpperCase() == 'POST') {
+            req.data = req.body;
+          }else if(req.method.toUpperCase() == 'GET') {
+            req.data = req.query;
+          }
+          controller(req,res,next);
         }
-    }
+    })
+  }
 
-    backEnd(path , ctrlUrl) {
-        delete require.cache[require.resolve(ctrlUrl)];
-        let ctrl = require(ctrlUrl);
-        let keys = Object.keys(ctrl);
-        for(let key of keys) {
-            this.app.use(path + "/" + key  , function(req,res,next){
-                //处理跨域
-                cors(res);
-                if(req.method.toUpperCase() != 'POST' && req.method.toUpperCase() != 'GET') {
-                    res.send("跨域检测完成");
-                }else {
-                    ctrl[key](req,res,next);
-                }
-            });
-        }
+  start(cb) {
+    this.status = 1;//启动中
+    this._server.listen(this.port , ()=>{
+      this.status = 2; //已启动
+      cb();
+    });
+  }
 
-    }
-
+  stop(cb) {
+    this.status = 3; //关闭中
+    this._server.close(()=>{
+      this.status = 4; //已关闭
+    });
+  }
 }
 
-module.exports=Server;
+module.exports = Server;

@@ -6,6 +6,6 @@ let options = {
 }
 
 let req = http.request(options,function(res){
-    console.log('成功关闭服务器');
+    console.log('成功关闭总服务器');
 });
 req.end();
