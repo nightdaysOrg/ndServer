@@ -69,7 +69,7 @@ class Server {
             res.send("跨域检测完成");
         }else {
           if(req.method.toUpperCase() == 'POST') {
-            req.data = req.body;
+            req.data = {...req.query , ...req.body};
           }else if(req.method.toUpperCase() == 'GET') {
             req.data = req.query;
           }
